@@ -3,7 +3,7 @@ import { fetchApi } from "@/utils";
 export const getForm = async (id: string): Promise<any> => {
   try {
     const response = await fetchApi({
-      method: "DELETE",
+      method: "GET",
       url: `/api/v1/forms/${id}`,
     });
 

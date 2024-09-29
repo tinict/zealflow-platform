@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
-import EditBox from "./editbox";
-
-import { DeleteQuestions } from "@/common/api/form/legacy/questions/questions.delete";
-import { PutQuestions } from "@/common/api/v0/forms/questions/questions.put";
-import { createQuestion } from "@/common/actions/create-question.action";
 import { getFormDetail } from "@/common/api/v0/forms/[formId]/bundle/route";
+import { QuestionCard } from "@/components/dynamic-form/components/question-card";
+import { createQuestion, deleteQuestion, updateQuestion } from "@/common/api/v0/dynamic-forms/questions";
 
 /**
  * Common
@@ -24,7 +20,6 @@ const Question = ({ ...props }) => {
   const { idCategory, dataques } = props;
   const [questions, setQuestions] = useState<Ques[]>([]);
 
-  // Fetch form details and set questions
   const fetchQueryQuestion = async () => {
     try {
       const data = await getFormDetail(idCategory);
@@ -35,47 +30,46 @@ const Question = ({ ...props }) => {
     }
   };
 
-  // Handle question creation
   const handleCreateQuestion = async () => {
     try {
-      await createQuestion(idCategory);
-      await fetchQueryQuestion(); // Re-fetch questions to reflect the new question
+      await createQuestion({
+        formId: idCategory,
+        title: "New title question",
+        type: "Mutiple-Choice",
+        explain: "",
+      });
+      await fetchQueryQuestion();
       toast.success("Question created successfully!");
     } catch (error) {
       toast.error("Failed to create question.");
     }
   };
 
-  // Handle question removal
   const handleRemoveQuestion = async (id: string) => {
     try {
       setQuestions((prev) => prev.filter((question) => question.id !== id));
-      await fetchDeleteQuestion(idCategory, id);
+      await fetchDeleteQuestion(id);
       toast.success("Question removed successfully!");
     } catch (error) {
       toast.error("Failed to remove question.");
     }
   };
 
-  // Handle question update
   const fetchPutQuestion = async (id: string, question: Ques) => {
     try {
-      await PutQuestions(id, question);
+      await updateQuestion(id, question);
       toast.success("Question updated successfully!");
     } catch (error) {
       toast.error("Failed to update question.");
     }
   };
 
-  // Delete question helper
   const fetchDeleteQuestion = async (
-    category_id: string,
     question_id: string,
   ) => {
-    return DeleteQuestions(category_id, question_id);
+    return deleteQuestion(question_id);
   };
 
-  // Set initial questions from props or re-fetch on category change
   useEffect(() => {
     setQuestions(dataques);
   }, [dataques]);
@@ -83,14 +77,13 @@ const Question = ({ ...props }) => {
   return (
     <>
       {questions?.map((question, index) => (
-        <EditBox
+        <QuestionCard
           key={index}
-          idCat={idCategory}
-          idQues={question?.id}
-          newbox={handleCreateQuestion}
-          ques={question}
-          removebox={() => handleRemoveQuestion(question?.id)}
+          question={question}
+          questionId={question?.id}
+          createQuestion={handleCreateQuestion}
           updateQuestion={fetchPutQuestion}
+          removeQuestion={() => handleRemoveQuestion(question?.id)}
         />
       ))}
     </>

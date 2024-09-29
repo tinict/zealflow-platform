@@ -3,13 +3,11 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-
 import { Form } from "./_interfaces";
-
-import { GetForms } from "@/common/api/v0/forms/route";
 import { useForm } from "@/common/hooks";
 import { ListForm } from "@/components/list-form";
 import { ControlForm } from "@/components/control-form";
+import { getListForm } from "@/common/api/v0/dynamic-forms/forms";
 import { HeaderForm } from "@/components/headers/form";
 
 export default function Page() {
@@ -21,12 +19,8 @@ export default function Page() {
 
   const fetchGetForm = async () => {
     try {
-      const data = await GetForms();
-
-      if (data) {
-        console.log(data?.props?.repo);
-        setListForm(data?.props?.repo?.data || []);
-      }
+      const forms = await getListForm();
+      if (forms) setListForm(forms.data);
     } catch (error) {
       console.error("Error fetching forms:", error);
       toast.error("Failed to load forms");
@@ -40,7 +34,6 @@ export default function Page() {
   const handleCreateForm = async () => {
     try {
       const formId = (await form.create()).formId;
-
       toast.success("Form Created Successfully!");
       router.push(`/forms/q/${formId}/edit`);
     } catch (error) {

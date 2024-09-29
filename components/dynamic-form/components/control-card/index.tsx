@@ -9,9 +9,9 @@ export const ControlCard = ({
 
     return (
         <>
-            <div className="hidden md:flex opacity-0 group-hover:opacity-100 flex flex-col justify-center items-center bg-white p-[2px] rounded-lg shadow-[rgba(0,0,0,0.05)_0px_0px_0px_1px,rgb(209,213,219)_0px_0px_0px_1px_inset] w-[50px] mb-[16px] absolute right-[-68] top-0">
+            <div className="hidden md:flex opacity-0 group-hover:opacity-100 flex flex-col justify-center items-center bg-white p-[2px] rounded-lg shadow-md w-[50px] mb-[16px] absolute right-[-68px] top-0">
                 <span
-                    className="h-[36px] w-[36px] flex flex-column items-center justify-center cursor-pointer"
+                    className="h-[36px] w-[36px] flex flex-col items-center justify-center cursor-pointer"
                     onClick={handleCreate}
                 >
                     <FontAwesomeIcon
@@ -20,7 +20,7 @@ export const ControlCard = ({
                     />
                 </span>
                 <span
-                    className="h-[36px] w-[36px] flex flex-column items-center justify-center cursor-pointer"
+                    className="h-[36px] w-[36px] flex flex-col items-center justify-center cursor-pointer"
                     onClick={handleRemove}
                 >
                     <FontAwesomeIcon className="text-gray-500 text-xl" icon={faTrash} />

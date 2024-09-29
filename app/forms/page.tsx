@@ -5,10 +5,11 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { Form } from "./_interfaces";
 import { useForm } from "@/common/hooks";
-import { ListForm } from "@/components/list-form";
 import { ControlForm } from "@/components/control-form";
 import { getListForm } from "@/common/api/v0/dynamic-forms/forms";
 import { HeaderForm } from "@/components/headers/form";
+import dynamic from "next/dynamic";
+import LazyLoading from "@/components/lazyloading";
 
 export default function Page() {
   const [listForm, setListForm] = useState<Form[] | []>([]);
@@ -41,6 +42,17 @@ export default function Page() {
       toast.error("Form Creation Failed!");
     }
   };
+
+  const ListForm = dynamic(
+    () => import('@/components/list-form'),
+    {
+      loading: () => {
+        return (
+          <LazyLoading />
+        );
+      },
+    }
+  );
 
   return (
     <section className="2xl:container mb-4">

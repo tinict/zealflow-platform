@@ -65,7 +65,6 @@ const Question = ({ ...props }) => {
     return deleteQuestion(question_id);
   };
 
-  // Initialize questions based on `dataques`
   useEffect(() => {
     if (Array.isArray(dataques)) {
       setQuestions(dataques);

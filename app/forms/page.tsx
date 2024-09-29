@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import dynamic from "next/dynamic";
+
 import { Form } from "./_interfaces";
+
 import { useForm } from "@/common/hooks";
 import { ControlForm } from "@/components/control-form";
 import { getListForm } from "@/common/api/v0/dynamic-forms/forms";
 import { HeaderForm } from "@/components/headers/form";
-import dynamic from "next/dynamic";
 import LazyLoading from "@/components/lazyloading";
 
 export default function Page() {
@@ -21,7 +23,8 @@ export default function Page() {
   const fetchGetForm = async () => {
     try {
       const forms = await getListForm();
-      if (forms) setListForm(forms.data);
+
+      if (forms) setListForm(forms?.data);
     } catch (error) {
       console.error("Error fetching forms:", error);
       toast.error("Failed to load forms");
@@ -35,6 +38,7 @@ export default function Page() {
   const handleCreateForm = async () => {
     try {
       const formId = (await form.create()).formId;
+
       toast.success("Form Created Successfully!");
       router.push(`/forms/q/${formId}/edit`);
     } catch (error) {
@@ -43,16 +47,11 @@ export default function Page() {
     }
   };
 
-  const ListForm = dynamic(
-    () => import('@/components/list-form'),
-    {
-      loading: () => {
-        return (
-          <LazyLoading />
-        );
-      },
-    }
-  );
+  const ListForm = dynamic(() => import("@/components/list-form"), {
+    loading: () => {
+      return <LazyLoading />;
+    },
+  });
 
   return (
     <section className="2xl:container mb-4">

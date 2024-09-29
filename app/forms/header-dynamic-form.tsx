@@ -7,24 +7,30 @@ import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { FaCode } from "react-icons/fa6";
 import toast from "react-hot-toast";
-import { Form } from "./_interfaces";
-import { updateForm } from "@/common/api/v0/dynamic-forms/forms";
 import debounce from "lodash.debounce";
+
+import { Form } from "./_interfaces";
+
+import { updateForm } from "@/common/api/v0/dynamic-forms/forms";
 import { getForm } from "@/common/api/v0/dynamic-forms/forms/form.get";
 
 const extractFormIdFromPath = (pathname: string): string => {
   const parts = pathname.split("/");
   const formIdIndex = parts.indexOf("q") + 1;
+
   return formIdIndex < parts.length ? parts[formIdIndex] : "";
 };
 
 export const HeaderDynamicForm = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const [form, setForm] = useState<Form | {
-    id: "",
-    title: "",
-  }>({
+  const [form, setForm] = useState<
+    | Form
+    | {
+        id: "";
+        title: "";
+      }
+  >({
     id: "",
     title: "",
   });
@@ -45,11 +51,12 @@ export const HeaderDynamicForm = () => {
         toast.error("Failed to update title.");
       }
     }, 300),
-    [formId]
+    [formId],
   );
 
   const handleGetForm = async () => {
     const response = (await getForm(formId)).data;
+
     setForm(response);
   };
 
@@ -75,6 +82,7 @@ export const HeaderDynamicForm = () => {
               variant={"underlined"}
               onChange={(e) => {
                 const newTitle = e.target.value;
+
                 setForm((prevForm) => ({ ...prevForm, title: newTitle }));
                 debouncedUpdateForm(newTitle);
               }}

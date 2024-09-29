@@ -5,13 +5,14 @@ import { useEffect, useState, useCallback } from "react";
 import toast from "react-hot-toast";
 import { useDisclosure } from "@nextui-org/modal";
 
+import LazyLoading from "../lazyloading";
+
 import { FormCard } from "./components";
 import { IListForm } from "./interfaces";
 import { ModalForm } from "./components/form-modal";
 import { FormEmty } from "./components/form-emty";
 
 import { deleteForm } from "@/common/api/v0/forms/route";
-import LazyLoading from "../lazyloading";
 
 const ListForm = ({ ...props }: IListForm) => {
   const { forms } = props;

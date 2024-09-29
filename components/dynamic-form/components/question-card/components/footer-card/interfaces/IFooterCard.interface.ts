@@ -1,5 +1,5 @@
 export interface IFooterCard {
-    explain: string,
-    onchangeExplain: any,
-    removeQuestion: any,
-};
+  explain: string;
+  onchangeExplain: any;
+  removeQuestion: any;
+}

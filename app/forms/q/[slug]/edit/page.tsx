@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import toast from "react-hot-toast";
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic";
+
 import { getFormDetail } from "@/common/api/v0/forms/[formId]/bundle/route";
 import LazyLoading from "@/components/lazyloading";
 
@@ -45,23 +46,15 @@ export default function Page() {
     fetchFormDetail();
   }, []);
 
-  const Question = dynamic(
-    () => import('./question'),
-    {
-      loading: () => {
-        return (
-          <LazyLoading />
-        );
-      },
-    }
-  );
+  const Question = dynamic(() => import("./question"), {
+    loading: () => {
+      return <LazyLoading />;
+    },
+  });
 
   return (
     <section className="col-span-12 xl:col-span-6 lg:col-span-8 md:col-span-10 sm:col-span-12 md:col-start-2 sm:col-start-0 lg:col-start-3 xl:col-start-4 col-start-1">
-      <Question
-        dataques={questions}
-        formId={splitPath(pathname)}
-      />
+      <Question dataques={questions} formId={splitPath(pathname)} />
     </section>
   );
 }

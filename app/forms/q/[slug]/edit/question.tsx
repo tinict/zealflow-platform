@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import dynamic from "next/dynamic";
+
 import { getFormDetail } from "@/common/api/v0/forms/[formId]/bundle/route";
-import { QuestionCard } from "@/components/dynamic-form/components/question-card";
-import { createQuestion, deleteQuestion, updateQuestion } from "@/common/api/v0/dynamic-forms/questions";
+import {
+  deleteQuestion,
+  updateQuestion,
+} from "@/common/api/v0/dynamic-forms/questions";
+import LazyLoading from "@/components/lazyloading";
+import { useQuestion } from "@/common/hooks/useQuestion";
 
 /**
  * Common
@@ -17,10 +23,11 @@ interface Ques {
 const Question = ({ ...props }) => {
   const { formId, dataques } = props;
   const [questions, setQuestions] = useState<Ques[]>([]);
-
+  const actionQuestions = useQuestion(formId);
   const fetchQueryQuestion = async () => {
     try {
       const data = await getFormDetail(formId);
+
       setQuestions(data?.props?.repo?.data?.questions || []);
     } catch (error) {
       toast.error("Failed to fetch questions.");
@@ -29,12 +36,7 @@ const Question = ({ ...props }) => {
 
   const handleCreateQuestion = async () => {
     try {
-      await createQuestion({
-        formId: formId,
-        title: "New title question",
-        type: "Mutiple-Choice",
-        explain: "",
-      });
+      await actionQuestions.create();
       await fetchQueryQuestion();
       toast.success("Question created successfully!");
     } catch (error) {
@@ -71,16 +73,25 @@ const Question = ({ ...props }) => {
     }
   }, [dataques]);
 
+  const QuestionCard = dynamic(
+    () => import("@/components/dynamic-form/components/question-card"),
+    {
+      loading: () => {
+        return <LazyLoading />;
+      },
+    },
+  );
+
   return (
     <>
       {questions?.map((question) => (
         <QuestionCard
           key={question.id}
+          createQuestion={handleCreateQuestion}
           question={question}
           questionId={question.id}
-          createQuestion={handleCreateQuestion}
-          updateQuestion={fetchPutQuestion}
           removeQuestion={() => handleRemoveQuestion(question?.id)}
+          updateQuestion={fetchPutQuestion}
         />
       ))}
     </>

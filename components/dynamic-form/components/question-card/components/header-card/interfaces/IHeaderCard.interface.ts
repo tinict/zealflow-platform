@@ -1,4 +1,4 @@
 export interface IHeaderCard {
-    title: string,
-    changeTitleQuestion: any,
-};
+  title: string;
+  changeTitleQuestion: any;
+}

@@ -1,1 +1,1 @@
-export * from "./IOption.interface"; 
+export * from "./IOption.interface";

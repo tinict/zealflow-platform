@@ -1,4 +1,4 @@
 export interface IControlCard {
-    handleCreate: any,
-    handleRemove: any,
-};
+  handleCreate: any;
+  handleRemove: any;
+}

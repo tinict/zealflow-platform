@@ -16,10 +16,10 @@ export const useForm = (payload: any) => {
 
       const question = await createQuestion({
         formId,
-        title: "title",
+        title: "New title question",
         results: [],
         type: "type",
-        explain: "explain",
+        explain: "",
       });
 
       if (!question) throw new Error("Question is not exist!");

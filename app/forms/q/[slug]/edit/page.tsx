@@ -35,7 +35,6 @@ export default function Page() {
       const formDetail = await getFormDetail(pathname.split("/")[3]);
 
       setQuestions(formDetail?.props?.repo?.data?.questions);
-      console.log(formDetail?.props?.repo?.data?.questions);
     } catch (err: any) {
       toast.error(err);
     }
@@ -49,7 +48,10 @@ export default function Page() {
 
   return (
     <section className="col-span-12 xl:col-span-6 lg:col-span-8 md:col-span-10 sm:col-span-12 md:col-start-2 sm:col-start-0 lg:col-start-3 xl:col-start-4 col-start-1">
-      <Question dataques={questions} idCategory={splitPath(pathname)} />
+      <Question
+        dataques={questions}
+        formId={splitPath(pathname)}
+      />
     </section>
   );
 }

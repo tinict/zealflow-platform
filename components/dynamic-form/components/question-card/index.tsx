@@ -14,83 +14,111 @@ export const QuestionCard = ({
 }: IQuestionCard) => {
     const { question, createQuestion, removeQuestion, questionId, updateQuestion } = props;
 
-    const [titleQuestion, setTitleQuestion] = useState<string>("");
+    const [titleQuestion, setTitleQuestion] = useState<string>("New title question");
     const [results, setResults] = useState<any>({});
     const [correctAnswers, setCorrectAnswers] = useState<any[]>([]);
     const [explain, setExplain] = useState<string>("");
     const [options, setOptions] = useState<IOption[]>([]);
     const [isChangeCorrectAnswers, setIsChangeCorrectAnswers] = useState<boolean>(false);
 
+    // Function to set the correct answer
     const setAnswerCorrect = (idOption: string) => {
         const updatedAnswers = [...correctAnswers];
-
         updatedAnswers[0] = { id: results.id, value: idOption };
         setCorrectAnswers(updatedAnswers);
     };
 
+    // Add a new option
     const handleAddOption = async () => {
-        await handleCreateOption({
-            questionId,
-            value: "New answer choices",
-        })
-            .then(async (res: any) => {
-                const newData = res.data;
-
-                setOptions((prevOptions) => [
-                    ...prevOptions,
-                    {
-                        id: newData.id,
-                        value: newData.value,
-                    },
-                ]);
-                toast.success("Add answer success!");
-            })
-            .catch(() => {
-                toast.error("Add answer failure!");
+        try {
+            const res = await createAnswer({
+                questionId,
+                value: "New answer choices",
             });
+            const newData = res.data;
+            setOptions((prevOptions) => [
+                ...prevOptions,
+                { id: newData.id, value: newData.value },
+            ]);
+            toast.success("Add answer success!");
+        } catch {
+            toast.error("Add answer failure!");
+        }
     };
 
+    // Update an answer
     const handleUpdateAnswer = async (option: any) => {
         await updateAnswer(option.id, option);
     };
 
+    // Delete an answer
     const handleDeleteAnswer = async (id: string) => {
-        await deleteAnswer(id)
-            .then(() => {
-                toast.success("Remove answer success!");
-            })
-            .catch(() => {
-                toast.error("Remove answer failure!");
-            });
+        try {
+            await deleteAnswer(id);
+            toast.success("Remove answer success!");
+        } catch {
+            toast.error("Remove answer failure!");
+        }
     };
 
-    const handleCreateOption = async (data: any) => {
-        return await createAnswer(data);
-    };
-
+    // Remove an option
     const handleRemoveOption = (id: string) => {
         setOptions(options.filter((option) => option?.id !== id));
         handleDeleteAnswer(id);
     };
 
+    // Update correct answers only if they've changed
     const fetchPutCorrectAnswers = async () => {
         if (isChangeCorrectAnswers) {
             await updateResult(correctAnswers[0].id, {
                 value: correctAnswers[0].value,
-            }).then(() => {
-                setIsChangeCorrectAnswers(false);
             });
+            setIsChangeCorrectAnswers(false);
         }
     };
 
+    // Update the question
     const handleUpdateQuestion = (id: string, dataUpdate: any) => {
-        updateQuestion(id, {
-            ...question,
-            ...dataUpdate,
-        });
-
-        fetchPutCorrectAnswers();
+        const isChanged = JSON.stringify(question) !== JSON.stringify({ ...question, ...dataUpdate });
+        if (isChanged) {
+            updateQuestion(id, { ...question, ...dataUpdate });
+            fetchPutCorrectAnswers();
+        }
     };
+
+    useEffect(() => {
+        if (questionId) {
+            setOptions(question?.answers);
+            setExplain(question?.explain);
+            setAnswerCorrect(question?.results[0]);
+            setResults({
+                id: question?.results[0]?.id,
+                value: question?.results[0]?.value,
+            });
+            setTitleQuestion(question?.title);
+        }
+    }, [questionId]);
+
+    useEffect(() => {
+        if (explain !== question.explain) {
+            handleUpdateQuestion(questionId, {
+                title: titleQuestion,
+                explain,
+                results: correctAnswers,
+                type: "multiple-choice",
+            });
+        }
+    }, [explain]);
+
+    useEffect(() => {
+        if (titleQuestion !== question.title) {
+            const isChanged = JSON.stringify(question) !== JSON.stringify({ ...question, ...{ title: titleQuestion } });
+            if (isChanged) {
+                updateQuestion(questionId, { ...question, ...{ title: titleQuestion } });
+                fetchPutCorrectAnswers();
+            }
+        }
+    }, [titleQuestion]);
 
     const handleSelectOption = (option: any) => {
         (e: any) => {
@@ -110,35 +138,6 @@ export const QuestionCard = ({
             );
         }
     };
-
-    useEffect(() => {
-        if (questionId) {
-            setOptions(question.answers);
-            setExplain(question.explain);
-            setAnswerCorrect(question.results[0]);
-            setResults({
-                value: question.results[0]?.value,
-                id: question.results[0]?.id,
-            });
-            setTitleQuestion(question.title);
-        }
-    }, [createQuestion, removeQuestion]);
-
-    useEffect(() => {
-        handleUpdateQuestion(questionId, {
-            title: titleQuestion,
-            explain,
-            results: correctAnswers,
-            type: "multiple-choice",
-        });
-    }, [explain, titleQuestion]);
-
-    useEffect(() => {
-        console.log(results);
-        updateResult(results.id, {
-            value: results.value
-        });
-    }, [results]);
 
     return (
         <>

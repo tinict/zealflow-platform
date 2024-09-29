@@ -1,17 +1,10 @@
 import { createAnswer } from "../api/v0/dynamic-forms/answers";
-import { createForm } from "../api/v0/dynamic-forms/forms";
 import { createQuestion } from "../api/v0/dynamic-forms/questions";
 import { createResult } from "../api/v0/dynamic-forms/results";
 
-export const useForm = (payload: any) => {
+export const useQuestion = (formId: string) => {
   const create = async () => {
     try {
-      const form = await createForm(payload);
-
-      if (!form) throw new Error("Form is not exist!");
-
-      const formId = form.data.id;
-
       if (!formId) throw new Error("Form Id is missing!");
 
       const question = await createQuestion({

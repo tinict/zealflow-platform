@@ -1,1 +1,1 @@
-export * from './IHeaderCard.interface';
+export * from "./IHeaderCard.interface";

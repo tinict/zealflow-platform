@@ -1,5 +1,7 @@
+import { IQuestion } from "@/app/forms/q/[slug]/edit/_interfaces";
+
 export interface IQuestionCard {
-  question: any;
+  question: IQuestion;
   createQuestion: any;
   removeQuestion: any;
   questionId: any;

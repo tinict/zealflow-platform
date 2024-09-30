@@ -1,34 +1,21 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import dynamic from "next/dynamic";
-
 import { getFormDetail } from "@/common/api/v0/forms/[formId]/bundle/route";
-import {
-  deleteQuestion,
-  updateQuestion,
-} from "@/common/api/v0/dynamic-forms/questions";
+import { deleteQuestion, updateQuestion } from "@/common/api/v0/dynamic-forms/questions";
 import LazyLoading from "@/components/lazyloading";
 import { useQuestion } from "@/common/hooks/useQuestion";
+import { IQuestion } from "./_interfaces";
 
-/**
- * Common
- */
-interface Ques {
-  id: string;
-  title: string;
-  type: string;
-  explain: string;
-}
-
-const Question = ({ ...props }) => {
-  const { formId, dataques } = props;
-  const [questions, setQuestions] = useState<Ques[]>([]);
+const ListQuestion = ({ ...props }) => {
+  const { formId, questions } = props;
+  const [listQuestion, setListQuestion] = useState<IQuestion[]>(questions);
   const actionQuestions = useQuestion(formId);
+
   const fetchQueryQuestion = async () => {
     try {
       const data = await getFormDetail(formId);
-
-      setQuestions(data?.props?.repo?.data?.questions || []);
+      setListQuestion(data?.props?.repo?.data?.questions || []);
     } catch (error) {
       toast.error("Failed to fetch questions.");
     }
@@ -47,14 +34,14 @@ const Question = ({ ...props }) => {
   const handleRemoveQuestion = async (id: string) => {
     try {
       await fetchDeleteQuestion(id);
-      setQuestions((prev) => prev.filter((question) => question?.id !== id));
+      setListQuestion((prev) => prev.filter((question) => question?.id !== id));
       toast.success("Question removed successfully!");
     } catch (error) {
       toast.error("Failed to remove question.");
     }
   };
 
-  const fetchPutQuestion = async (id: string, question: Ques) => {
+  const fetchPutQuestion = async (id: string, question: IQuestion) => {
     try {
       await updateQuestion(id, question);
       toast.success("Question updated successfully!");
@@ -68,10 +55,10 @@ const Question = ({ ...props }) => {
   };
 
   useEffect(() => {
-    if (Array.isArray(dataques)) {
-      setQuestions(dataques);
+    if (Array.isArray(questions)) {
+      setListQuestion(questions);
     }
-  }, [dataques]);
+  }, [questions]);
 
   const QuestionCard = dynamic(
     () => import("@/components/dynamic-form/components/question-card"),
@@ -84,7 +71,7 @@ const Question = ({ ...props }) => {
 
   return (
     <>
-      {questions?.map((question) => (
+      {listQuestion?.map((question: any) => (
         <QuestionCard
           key={question.id}
           createQuestion={handleCreateQuestion}
@@ -98,4 +85,4 @@ const Question = ({ ...props }) => {
   );
 };
 
-export default Question;
+export default ListQuestion;

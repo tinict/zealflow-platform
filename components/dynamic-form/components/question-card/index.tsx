@@ -25,14 +25,12 @@ const QuestionCard = ({ ...props }: IQuestionCard) => {
     updateQuestion,
   } = props;
 
-  const [titleQuestion, setTitleQuestion] =
-    useState<string>("New title question");
-  const [results, setResults] = useState<any>({});
-  const [correctAnswers, setCorrectAnswers] = useState<any[]>([]);
-  const [explain, setExplain] = useState<string>("");
+  const [titleQuestion, setTitleQuestion] = useState<string>(question.title);
+  const [results, setResults] = useState<any>(question.results[0]);
+  const [correctAnswers, setCorrectAnswers] = useState<any[]>(question.results);
+  const [explain, setExplain] = useState<string>(question.explain);
   const [options, setOptions] = useState<IOption[]>([]);
-  const [isChangeCorrectAnswers, setIsChangeCorrectAnswers] =
-    useState<boolean>(false);
+  const [isChangeCorrectAnswers, setIsChangeCorrectAnswers] = useState<boolean>(false);
 
   const setAnswerCorrect = (idOption: string) => {
     const updatedAnswers = [...correctAnswers];
@@ -87,9 +85,7 @@ const QuestionCard = ({ ...props }: IQuestionCard) => {
   };
 
   const handleUpdateQuestion = (id: string, dataUpdate: any) => {
-    const isChanged =
-      JSON.stringify(question) !==
-      JSON.stringify({ ...question, ...dataUpdate });
+    const isChanged = JSON.stringify(question) !== JSON.stringify({ ...question, ...dataUpdate });
 
     if (isChanged) {
       updateQuestion(id, { ...question, ...dataUpdate });
@@ -137,79 +133,64 @@ const QuestionCard = ({ ...props }: IQuestionCard) => {
     }
   }, [titleQuestion]);
 
-  const handleSelectOption = (option: any) => {
-    (e: any) => {
-      setOptions(
-        options?.map((opt: any) => {
-          if (opt.id === option.id) {
-            handleUpdateAnswer(option);
-
-            return {
-              ...opt,
-              value: e.target.value,
-            };
-          }
-
-          return opt;
-        }),
-      );
-    };
+  const handleSelectOption = async (idAnswerCorrect: any) => {
+    await updateResult(results.id, {
+      value: idAnswerCorrect
+    });
   };
 
   return (
-    <>
-      <div className="group bg-white p-6 rounded-lg shadow-[rgba(0,0,0,0.05)_0px_0px_0px_1px,rgb(209,213,219)_0px_0px_0px_1px_inset] w-full mb-[16px] relative mt-4">
-        <HeaderCard
-          changeTitleQuestion={(e: any) => {
-            setTitleQuestion(e.target.value);
-          }}
-          title={titleQuestion}
-        />
-        <ContentCard
-          handleAddOption={handleAddOption}
-          handleRemoveOption={handleRemoveOption}
-          handleSelectOption={handleSelectOption}
-          handleUpdateOption={(e: any, option: any) => {
-            setOptions(
-              options.map((opt: any) => {
-                if (opt.id === option.id) {
-                  handleUpdateAnswer({
-                    id: option.id,
-                    value: e.target.value,
-                  });
+    <div className="group bg-white p-6 rounded-lg shadow-[rgba(0,0,0,0.05)_0px_0px_0px_1px,rgb(209,213,219)_0px_0px_0px_1px_inset] w-full mb-[16px] relative mt-4">
+      <HeaderCard
+        changeTitleQuestion={(e: any) => {
+          setTitleQuestion(e.target.value);
+        }}
+        title={titleQuestion}
+      />
+      <ContentCard
+        handleAddOption={handleAddOption}
+        handleRemoveOption={handleRemoveOption}
+        handleSelectOption={handleSelectOption}
+        handleUpdateOption={(e: any, option: any) => {
+          setOptions(
+            options.map((opt: any) => {
+              if (opt.id === option.id) {
+                handleUpdateAnswer({
+                  id: option.id,
+                  value: e.target.value,
+                });
 
-                  return {
-                    ...opt,
-                    value: e.target.value,
-                  };
-                }
+                return {
+                  ...opt,
+                  value: e.target.value,
+                };
+              }
 
-                return opt;
-              }),
-            );
-          }}
-          options={options}
-          value={results?.value}
-          onChangeOption={(e: any) => {
-            setResults({
-              ...results,
-              value: e.target.value,
-            });
-            setIsChangeCorrectAnswers(true);
-          }}
-        />
-        <div className="border-t border-gray-300 my-4" />
-        <FooterCard
-          explain={explain}
-          onchangeExplain={(e: any) => setExplain(e.target.value)}
-          removeQuestion={removeQuestion}
-        />
-        <ControlCard
-          handleCreate={createQuestion}
-          handleRemove={removeQuestion}
-        />
-      </div>
-    </>
+              return opt;
+            }),
+          );
+        }}
+        options={options}
+        value={results?.value}
+        onChangeOption={(e: any) => {
+          setResults({
+            ...results,
+            value: e.target.value,
+          });
+          setIsChangeCorrectAnswers(true);
+        }}
+      />
+      <div className="border-t border-gray-300 my-4" />
+      <FooterCard
+        explain={explain}
+        onchangeExplain={(e: any) => setExplain(e.target.value)}
+        removeQuestion={removeQuestion}
+      />
+      <ControlCard
+        handleCreate={createQuestion}
+        handleRemove={removeQuestion}
+      />
+    </div>
   );
 };
 

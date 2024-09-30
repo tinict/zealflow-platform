@@ -3,11 +3,9 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Image } from "@nextui-org/image";
-
 import QuestionBox from "./questionbox";
-
-import { GetQuiz } from "@/common/api/form/legacy/quiz.get";
 import { noForms } from "@/utils/medias";
+import { getFormDetail } from "@/common/api/v0/forms/[formId]/bundle/route";
 
 /**
  * common
@@ -44,11 +42,11 @@ export default function Page({ ...props }) {
   const pathname = usePathname();
 
   const fetchGetQuiz = async (id: any) => {
-    const data = await GetQuiz(id);
+    const formDetail = await getFormDetail(id);
 
-    if (data) {
-      setQuestions(data?.props?.repo?.data[0]?.questions);
-      setFormTitle(data?.props?.repo?.data[0]?.name);
+    if (formDetail) {
+      setQuestions(formDetail?.props?.repo?.data?.questions);
+      setFormTitle(formDetail?.props?.repo?.data?.title);
     }
   };
 

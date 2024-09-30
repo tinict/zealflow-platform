@@ -29,7 +29,7 @@ const QuestionBox = ({ ...props }) => {
 
   const handleSelected = (item: any) => {
     setSelected(true);
-    setSelectedAnswer(item.id);
+    setSelectedAnswer(item.value);
     setClearButton(true);
     setDoneButton(true);
   };
@@ -46,12 +46,10 @@ const QuestionBox = ({ ...props }) => {
 
   const compareResult = () => {
     const { results } = questions;
-    const isCorrect = results?.includes(selectedAnswer);
 
+    const isCorrect = results.some((result: any) => result.value === selectedAnswer);
     setCheckAnswer(isCorrect);
-    if (!isCorrect) {
-      setShowCorrectAnswer(true);
-    }
+    if (!isCorrect) setShowCorrectAnswer(true);
     setClearButton(false);
     setDoneButton(false);
     setExplained(true);
@@ -70,18 +68,17 @@ const QuestionBox = ({ ...props }) => {
   };
 
   const handleDisableRadio = (id: any) => {
-    if (id !== selectedAnswer) {
-      if (checkAnswer || checkAnswer === false) {
+    if (id !== selectedAnswer)
+      if (checkAnswer || checkAnswer === false)
         return true;
-      }
-    } else return false;
+    return false;
   };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-[rgba(0,0,0,0.05)_0px_0px_0px_1px,rgb(209,213,219)_0px_0px_0px_1px_inset] w-full mb-[16px]">
       <fieldset className="space-y-4">
         <legend className="text-[16px] text-[rgb(32,33,36)] font-['docs-Roboto','Helvetica','Arial','sans-serif']">
-          {questions.name}
+          {questions.title}
         </legend>
         <RadioGroup
           aria-label="shirt-size"
@@ -91,9 +88,9 @@ const QuestionBox = ({ ...props }) => {
           value={selectedAnswer}
           onChange={(e) => setSelectedAnswer(e.target.value)}
         >
-          {questions.answers.map((item: any, index: number) => (
+          {questions.answers.map((item: any) => (
             <div
-              key={index}
+              key={item.id}
               className="flex justify-between items-center space-x-2"
             >
               <Radio
@@ -105,7 +102,7 @@ const QuestionBox = ({ ...props }) => {
               >
                 {item.value}
               </Radio>
-              {showCorrectAnswer && questions.results.includes(item.id) && (
+              {showCorrectAnswer && questions.results.some((result: any) => result.value === item.id) && (
                 <FontAwesomeIcon
                   className="text-gray-500"
                   icon={faCircleCheck}
@@ -113,7 +110,7 @@ const QuestionBox = ({ ...props }) => {
               )}
               {selectedAnswer !== "M" &&
                 showCorrectAnswer &&
-                !questions.results.includes(item.id) && (
+                questions.results.some((result: any) => result.value !== item.id) && (
                   <FontAwesomeIcon className="text-red-500" icon={faXmark} />
                 )}
             </div>

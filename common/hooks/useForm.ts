@@ -16,7 +16,7 @@ export const useForm = (payload: any) => {
 
       const question = await createQuestion({
         formId,
-        title: "New title question",
+        title: "Question",
         type: "type",
         explain: "",
       });
@@ -27,22 +27,29 @@ export const useForm = (payload: any) => {
 
       if (!questionId) throw new Error("Question Id is missing!");
 
-      const answer = await createAnswer({
-        questionId,
-        value: "New option",
-      });
+      // const answer = await createAnswer({
+      //   questionId,
+      //   value: "New Option",
+      // });
+
+
+      // const result = await createResult({
+      //   questionId,
+      //   value: "",
+      // });
+
+      const [result, answer] = await Promise.all([
+        createResult({
+          questionId,
+          value: "",
+        }),
+        createAnswer({
+          questionId,
+          value: "New Option",
+        }),
+      ]);
 
       if (!answer) throw new Error("Answer is not exist!");
-
-      const answerId = answer.data.id;
-
-      if (!answerId) throw new Error("Answer Id is missing!");
-
-      const result = await createResult({
-        questionId,
-        value: answerId,
-      });
-
       if (!result) throw new Error("Result is not exist!");
 
       return {

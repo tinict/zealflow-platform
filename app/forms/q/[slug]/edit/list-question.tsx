@@ -44,7 +44,6 @@ const ListQuestion = ({ ...props }) => {
   const fetchPutQuestion = async (id: string, question: IQuestion) => {
     try {
       await updateQuestion(id, question);
-      toast.success("Question updated successfully!");
     } catch (error) {
       toast.error("Failed to update question.");
     }
@@ -73,10 +72,10 @@ const ListQuestion = ({ ...props }) => {
     <>
       {listQuestion?.map((question: any) => (
         <QuestionCard
-          key={question.id}
+          key={question?.id}
           createQuestion={handleCreateQuestion}
           question={question}
-          questionId={question.id}
+          questionId={question?.id}
           removeQuestion={() => handleRemoveQuestion(question?.id)}
           updateQuestion={fetchPutQuestion}
         />

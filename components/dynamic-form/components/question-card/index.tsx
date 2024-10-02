@@ -34,8 +34,7 @@ const QuestionCard = ({ ...props }: IQuestionCard) => {
 
   const setAnswerCorrect = (idOption: string) => {
     const updatedAnswers = [...correctAnswers];
-
-    updatedAnswers[0] = { id: results.id, value: idOption };
+    updatedAnswers[0] = { id: results?.id, value: idOption };
     setCorrectAnswers(updatedAnswers);
   };
 

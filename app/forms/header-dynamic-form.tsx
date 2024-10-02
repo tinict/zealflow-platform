@@ -27,9 +27,9 @@ export const HeaderDynamicForm = () => {
   const [form, setForm] = useState<
     | Form
     | {
-        id: "";
-        title: "";
-      }
+      id: "";
+      title: "";
+    }
   >({
     id: "",
     title: "",
@@ -46,7 +46,6 @@ export const HeaderDynamicForm = () => {
     debounce(async (title: string) => {
       try {
         await updateForm(formId, { title });
-        toast.success("Form title updated!");
       } catch (error) {
         toast.error("Failed to update title.");
       }
@@ -110,7 +109,7 @@ export const HeaderDynamicForm = () => {
             <FaCode
               className="text-gray-700 h-[20px] w-[20px] text-[gray] cursor-pointer"
               onClick={() => {
-                toast.error("Feature under development");
+                router.push(`/forms/q/${formId}/edit/view-json`);
               }}
             />
           </div>

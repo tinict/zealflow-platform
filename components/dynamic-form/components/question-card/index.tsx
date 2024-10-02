@@ -139,7 +139,9 @@ const QuestionCard = ({ ...props }: IQuestionCard) => {
   };
 
   return (
-    <div className="group bg-white p-6 rounded-lg shadow-[rgba(0,0,0,0.05)_0px_0px_0px_1px,rgb(209,213,219)_0px_0px_0px_1px_inset] w-full mb-[16px] relative mt-4">
+    <div
+      className="group bg-white p-6 rounded-lg shadow-[rgba(0,0,0,0.05)_0px_0px_0px_1px,rgb(209,213,219)_0px_0px_0px_1px_inset] w-full mb-[16px] relative mt-4 border-4 hover:border-indigo-200 hover:border-l-indigo-500 active:border-indigo-200 active:border-l-indigo-500 focus:border-indigo-200 focus:border-l-indigo-500"
+    >
       <HeaderCard
         changeTitleQuestion={(e: any) => {
           setTitleQuestion(e.target.value);

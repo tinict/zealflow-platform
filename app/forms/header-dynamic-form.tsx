@@ -13,6 +13,8 @@ import { Form } from "./_interfaces";
 
 import { updateForm } from "@/common/api/v0/dynamic-forms/forms";
 import { getForm } from "@/common/api/v0/dynamic-forms/forms/form.get";
+import { SiGoogleforms } from "react-icons/si";
+import { FaCloud } from "react-icons/fa";
 
 const extractFormIdFromPath = (pathname: string): string => {
   const parts = pathname.split("/");
@@ -66,12 +68,9 @@ export const HeaderDynamicForm = () => {
   return (
     <>
       <header className="h-[60px] w-full grid grid-cols-2">
-        <div className="flex items-center space-x-4">
-          <div className="flex h-[22px] w-[22px] items-center justify-center">
-            <FontAwesomeIcon
-              className="text-gray-700 w-full h-full text-[blue] cursor-pointer"
-              icon={faFolder}
-            />
+        <div className="flex items-center space-x-2">
+          <div className="flex h-[32px] w-[32px] items-center justify-center">
+            <SiGoogleforms className="text-gray-700 w-full h-full text-indigo-700 cursor-pointer" />
           </div>
           <span className="sm:flex">
             <Input
@@ -87,6 +86,10 @@ export const HeaderDynamicForm = () => {
               }}
             />
           </span>
+          <div className="flex h-[32px] w-[32px] items-center justify-center">
+            <FaCloud className="text-gray-700 w-full h-full text-slate-300" />
+          </div>
+          <span className="text-xs">Displayed content form</span>
         </div>
         <div className="flex items-center justify-end space-x-2 gap-4">
           <div className="flex items-center justify-center">

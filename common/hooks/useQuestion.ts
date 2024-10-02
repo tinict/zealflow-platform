@@ -9,7 +9,7 @@ export const useQuestion = (formId: string) => {
 
       const question = await createQuestion({
         formId,
-        title: "New title question",
+        title: "Question",
         type: "type",
         explain: "",
       });
@@ -22,7 +22,7 @@ export const useQuestion = (formId: string) => {
 
       const answer = await createAnswer({
         questionId,
-        value: "New option",
+        value: "New Option",
       });
 
       if (!answer) throw new Error("Answer is not exist!");

@@ -45,7 +45,6 @@ export default function RootLayout({
           <div className="grid grid-cols-1">
             <HeaderHome />
             <main className="grid grid-col-1">{children}</main>
-            <FooterHome />
           </div>
         </Providers>
       </body>

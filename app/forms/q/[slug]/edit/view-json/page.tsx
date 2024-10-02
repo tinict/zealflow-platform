@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import ReactJson from 'react-json-view';
+// import ReactJson from 'react-json-view';
 
 export default function Page({ ...props }) {
   const { jsonData } = props;
@@ -27,14 +27,14 @@ export default function Page({ ...props }) {
         suppressContentEditableWarning={true}
         className='h-full w-full bg-black'
       >
-        <ReactJson
+        {/* <ReactJson
           src={json}
           onEdit={(edit) => setJson(edit.updated_src)}
           onAdd={(edit) => setJson(edit.updated_src)}
           onDelete={(edit) => setJson(edit.updated_src)}
           theme="twilight"
           enableClipboard={true}
-        />
+        /> */}
       </div>
     </section>
   );

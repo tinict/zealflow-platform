@@ -17,7 +17,7 @@ export default function Page() {
   const [listForm, setListForm] = useState<Form[] | []>([]);
   const router = useRouter();
   const form = useForm({
-    title: "Template without title",
+    title: "Untitled form",
   });
 
   const fetchGetForm = async () => {

@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardList, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Input } from "@nextui-org/react";
+import { Input, Switch } from "@nextui-org/react";
 
 import { IFooterCard } from "./interfaces";
 
@@ -38,6 +38,10 @@ export const FooterCard = ({ ...props }: IFooterCard) => {
             onClick={removeQuestion}
           />
         </button>
+        <div className="flex h-[20px] justify-center items-center gap-2">
+          <span className="text-sm">Required</span>
+          <Switch size="sm" defaultSelected aria-label="Automatic updates" />
+        </div>
       </div>
     </div>
   );

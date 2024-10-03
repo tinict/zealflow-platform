@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardList, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Input, Switch } from "@nextui-org/react";
-
+import { SlOptionsVertical } from "react-icons/sl";
 import { IFooterCard } from "./interfaces";
 
 export const FooterCard = ({ ...props }: IFooterCard) => {
@@ -42,6 +42,9 @@ export const FooterCard = ({ ...props }: IFooterCard) => {
           <span className="text-sm">Required</span>
           <Switch size="sm" defaultSelected aria-label="Automatic updates" />
         </div>
+        <button>
+          <SlOptionsVertical className="text-gray-500 text-xl" />
+        </button>
       </div>
     </div>
   );

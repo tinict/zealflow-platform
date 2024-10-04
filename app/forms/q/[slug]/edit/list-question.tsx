@@ -6,6 +6,7 @@ import { deleteQuestion, updateQuestion } from "@/common/api/v0/dynamic-forms/qu
 import LazyLoading from "@/components/lazyloading";
 import { useQuestion } from "@/common/hooks/useQuestion";
 import { IQuestion } from "./_interfaces";
+import { Input } from "@nextui-org/react";
 
 const ListQuestion = ({ ...props }) => {
   const { formId, questions } = props;
@@ -70,6 +71,16 @@ const ListQuestion = ({ ...props }) => {
 
   return (
     <>
+      <div
+        className="group bg-white p-6 rounded-lg shadow-[rgba(0,0,0,0.05)_0px_0px_0px_1px,rgb(209,213,219)_0px_0px_0px_1px_inset] w-full mb-[16px] relative mt-4 border-4 hover:border-indigo-200 hover:border-l-indigo-500 active:border-indigo-200 active:border-l-indigo-500 focus:border-indigo-200 focus:border-l-indigo-500"
+      >
+        <div key={"underlined"} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+          <Input type="text" variant={"underlined"} label="Title" />
+        </div>
+        <div key={"underlined"} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+          <Input type="text" variant={"underlined"} label="Description" />
+        </div>
+      </div>
       {listQuestion?.map((question: any) => (
         <QuestionCard
           key={question?.id}

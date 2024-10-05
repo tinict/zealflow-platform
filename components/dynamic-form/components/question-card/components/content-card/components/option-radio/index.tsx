@@ -34,7 +34,10 @@ export const OptionRadio = ({ ...props }: IOption) => {
         }
       />
       <div className="relative">
-        <MdDragIndicator className="h-[28px] w-[28px] cursor-pointer text-gray-700" onClick={() => setShowMenu(!showMenu)} />
+        <MdDragIndicator
+          className="h-[28px] w-[28px] cursor-pointer text-gray-700"
+          onClick={() => setShowMenu(!showMenu)}
+        />
         <div className={`absolute z-20 right-0 flex flex-col rounded-lg bg-white shadow-sm border border-slate-200 ${showMenu ? "flex" : "hidden"}`}>
           <nav className="flex min-w-[240px] flex-col gap-1 p-1.5">
             <div

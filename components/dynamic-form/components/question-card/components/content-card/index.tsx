@@ -2,6 +2,8 @@ import { RadioGroup } from "@nextui-org/radio";
 
 import { IContentCard } from "./interfaces";
 import { OptionRadio } from "./components/option-radio";
+import { ReactSortable } from "react-sortablejs";
+import { useEffect, useState } from "react";
 
 export const ContentCard = ({ ...props }: IContentCard) => {
   const {
@@ -14,6 +16,12 @@ export const ContentCard = ({ ...props }: IContentCard) => {
     handleAddOption,
   } = props;
 
+  const [state, setState] = useState<any[]>(options);
+
+  useEffect(() => {
+    setState(options);
+  }, [options]);
+
   return (
     <div className="mt-6 mb-4">
       <RadioGroup
@@ -24,19 +32,25 @@ export const ContentCard = ({ ...props }: IContentCard) => {
         value={value}
         onChange={onChangeOption}
       >
-        {options?.map((option: any, index: number) => {
-          return (
-            <OptionRadio
-              key={option?.id}
-              actionChangeOption={handleUpdateOption}
-              actionRemoveOption={() => handleRemoveOption(option?.id)}
-              actionSelectOption={() => handleSelectOption(option?.id)}
-              id={option?.id}
-              index={index}
-              value={option?.value}
-            />
-          );
-        })}
+        <ReactSortable
+          multiDrag
+          list={state}
+          setList={setState}
+        >
+          {state?.map((option: any, index: number) => {
+            return (
+              <OptionRadio
+                key={option?.id}
+                actionChangeOption={handleUpdateOption}
+                actionRemoveOption={() => handleRemoveOption(option?.id)}
+                actionSelectOption={() => handleSelectOption(option?.id)}
+                id={option?.id}
+                index={index}
+                value={option?.value}
+              />
+            );
+          })}
+        </ReactSortable>
       </RadioGroup>
       <div className="flex items-center w-full space-x-4 mt-4">
         <svg

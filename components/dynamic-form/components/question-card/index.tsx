@@ -15,6 +15,7 @@ import {
   deleteAnswer,
   updateAnswer,
 } from "@/common/api/v0/dynamic-forms/answers";
+import { RxDragHandleHorizontal } from "react-icons/rx";
 
 const QuestionCard = ({ ...props }: IQuestionCard) => {
   const {
@@ -140,8 +141,11 @@ const QuestionCard = ({ ...props }: IQuestionCard) => {
 
   return (
     <div
-      className="group bg-white p-6 rounded-lg shadow-[rgba(0,0,0,0.05)_0px_0px_0px_1px,rgb(209,213,219)_0px_0px_0px_1px_inset] w-full mb-[16px] relative mt-4 border-4 hover:border-indigo-200 hover:border-l-indigo-500 active:border-indigo-200 active:border-l-indigo-500 focus:border-indigo-200 focus:border-l-indigo-500"
+      className="relative group bg-white p-6 rounded-lg shadow-[rgba(0,0,0,0.05)_0px_0px_0px_1px,rgb(209,213,219)_0px_0px_0px_1px_inset] w-full mb-[16px] relative mt-4 border-4 hover:border-indigo-200 hover:border-l-indigo-500 active:border-indigo-200 active:border-l-indigo-500 focus:border-indigo-200 focus:border-l-indigo-500"
     >
+      <div className="hidden group-hover:block w-full h-full bg-[#ffffff]">
+        <RxDragHandleHorizontal className="text-gray-400 cursor-move text-[28px] absolute top-0 right-1/2" />
+      </div>
       <HeaderCard
         changeTitleQuestion={(e: any) => {
           setTitleQuestion(e.target.value);

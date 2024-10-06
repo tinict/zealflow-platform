@@ -7,6 +7,16 @@ import LazyLoading from "@/components/lazyloading";
 import { useQuestion } from "@/common/hooks/useQuestion";
 import { IQuestion } from "./_interfaces";
 import { Input } from "@nextui-org/react";
+import { ReactSortable } from "react-sortablejs";
+
+const QuestionCard = dynamic(
+  () => import("@/components/dynamic-form/components/question-card"),
+  {
+    loading: () => {
+      return <LazyLoading />;
+    },
+  },
+);
 
 const ListQuestion = ({ ...props }) => {
   const { formId, questions } = props;
@@ -60,15 +70,6 @@ const ListQuestion = ({ ...props }) => {
     }
   }, [questions]);
 
-  const QuestionCard = dynamic(
-    () => import("@/components/dynamic-form/components/question-card"),
-    {
-      loading: () => {
-        return <LazyLoading />;
-      },
-    },
-  );
-
   return (
     <>
       <div
@@ -81,16 +82,22 @@ const ListQuestion = ({ ...props }) => {
           <Input type="text" variant={"underlined"} label="Description" />
         </div>
       </div>
-      {listQuestion?.map((question: any) => (
-        <QuestionCard
-          key={question?.id}
-          createQuestion={handleCreateQuestion}
-          question={question}
-          questionId={question?.id}
-          removeQuestion={() => handleRemoveQuestion(question?.id)}
-          updateQuestion={fetchPutQuestion}
-        />
-      ))}
+      <ReactSortable
+        multiDrag
+        list={listQuestion}
+        setList={setListQuestion}
+      >
+        {listQuestion?.map((question: any) => (
+          <QuestionCard
+            key={question?.id}
+            createQuestion={handleCreateQuestion}
+            question={question}
+            questionId={question?.id}
+            removeQuestion={() => handleRemoveQuestion(question?.id)}
+            updateQuestion={fetchPutQuestion}
+          />
+        ))}
+      </ReactSortable>
     </>
   );
 };
